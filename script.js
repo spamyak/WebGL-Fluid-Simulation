@@ -531,6 +531,7 @@ const blit = (() => {
 
 let lastTime = Date.now();
 multipleSplats(parseInt(Math.random() * 20) + 5);
+pointers[0].down = true;
 update();
 
 function update () {
@@ -663,6 +664,7 @@ canvas.addEventListener('mousemove', (e) => {
     pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
     pointers[0].x = e.offsetX;
     pointers[0].y = e.offsetY;
+    pointers[0].color = [pointers[0].color[0] + ((Math.random()-.5)*.1), pointers[0].color[1] + ((Math.random()-.5)*.1), pointers[0].color[2] + ((Math.random()-.5)*.1)];
 });
 
 canvas.addEventListener('touchmove', (e) => {
@@ -696,16 +698,4 @@ canvas.addEventListener('touchstart', (e) => {
         pointers[i].y = touches[i].pageY;
         pointers[i].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
     }
-});
-
-window.addEventListener('mouseup', () => {
-    pointers[0].down = false;
-});
-
-window.addEventListener('touchend', (e) => {
-    const touches = e.changedTouches;
-    for (let i = 0; i < touches.length; i++)
-        for (let j = 0; j < pointers.length; j++)
-            if (touches[i].identifier == pointers[j].id)
-                pointers[j].down = false;
 });
