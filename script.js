@@ -8,7 +8,7 @@ let config = {
     TEXTURE_DOWNSAMPLE: 1,
     DENSITY_DISSIPATION: 0.98,
     VELOCITY_DISSIPATION: 0.99,
-    PRESSURE_DISSIPATION: 0.8,
+    PRESSURE_DISSIPATION: 0.9,
     PRESSURE_ITERATIONS: 25,
     CURL: 30,
     SPLAT_RADIUS: 0.005
@@ -530,12 +530,67 @@ const blit = (() => {
 })();
 
 let lastTime = Date.now();
-multipleSplats(parseInt(Math.random() * 20) + 5);
+//multipleSplats(parseInt(Math.random() * 20) + 5);
 pointers[0].down = true;
+pointers[0].color = [1,1,1];
+pointers.push(new pointerPrototype());
+canvas.width * Math.random()
+pointers[1].down = true;
+pointers[1].color = [.2,.2,.2];
+var xvel = 30.0;
+var yvel = 30.0;
 update();
 
 function update () {
     resizeCanvas();
+	
+	// pointer 1
+	pointers[1].moved = pointers[1].down;
+	
+	if(pointers[1].x >  canvas.width){xvel = -(Math.random()*10)}
+	if(pointers[1].x <             0){xvel =  (Math.random()*10)}
+	if(pointers[1].y > canvas.height){yvel = -(Math.random()*10)}
+	if(pointers[1].y <             0){yvel =  (Math.random()*10)}
+	
+	xvel = xvel*.999 + ((Math.random() - .5));
+	yvel = yvel*.999 + ((Math.random() - .5));
+	let newx = pointers[1].x + xvel;
+	let newy = pointers[1].y + yvel;
+	if(Math.random() < 0.0005){
+		newy = -2000;
+		config.DENSITY_DISSIPATION = 0.98;
+		config.VELOCITY_DISSIPATION = 0.99;
+		config.PRESSURE_DISSIPATION = 0.9;
+		config.CURL = 30;
+		splatStack.push(parseInt(Math.random() * 50) + 15);
+	}
+	if(Math.random() < 0.01){
+		splatStack.push(1)
+	}
+	if(Math.random() < 0.005){
+		if(Math.random() < .2){config.DENSITY_DISSIPATION = 0.98}
+		if(Math.random() < .1){config.DENSITY_DISSIPATION = 0.993}
+		if(Math.random() < .1){config.DENSITY_DISSIPATION = Math.random()*.10 + .9}
+		if(Math.random() < .2){config.VELOCITY_DISSIPATION = Math.random()*.05 + .95}
+		if(Math.random() < .2){config.VELOCITY_DISSIPATION = 1}
+		if(Math.random() < .2){config.PRESSURE_DISSIPATION = .9}
+		if(Math.random() < .2){config.PRESSURE_DISSIPATION = 1}
+		if(Math.random() < .2){config.PRESSURE_DISSIPATION = 0}
+		if(Math.random() < .5){config.CURL = Math.random()*50}
+	}
+
+    pointers[1].dx = (newx - pointers[1].x) * 10.0;
+    pointers[1].dy = (newy - pointers[1].y) * 10.0;
+    pointers[1].x = newx;
+    pointers[1].y = newy;
+	
+    pointers[1].color = [pointers[1].color[0] + ((Math.random()-.5)*.1), pointers[1].color[1] + ((Math.random()-.5)*.1), pointers[1].color[2] + ((Math.random()-.5)*.1)];
+	if (pointers[1].color[0] > 2){pointers[1].color[0] = 0;}
+	if (pointers[1].color[0] < -.2){pointers[1].color[0] = .2;}
+	if (pointers[1].color[1] > 2){pointers[1].color[1] = 0;}
+	if (pointers[1].color[1] < -.2){pointers[1].color[1] = .2;}
+	if (pointers[1].color[2] > 2){pointers[1].color[2] = 0;}
+	if (pointers[1].color[2] < -.2){pointers[1].color[2] = .2;}
 
     const dt = Math.min((Date.now() - lastTime) / 1000, 0.016);
     lastTime = Date.now();
@@ -665,6 +720,12 @@ canvas.addEventListener('mousemove', (e) => {
     pointers[0].x = e.offsetX;
     pointers[0].y = e.offsetY;
     pointers[0].color = [pointers[0].color[0] + ((Math.random()-.5)*.1), pointers[0].color[1] + ((Math.random()-.5)*.1), pointers[0].color[2] + ((Math.random()-.5)*.1)];
+	if (pointers[0].color[0] > 2){pointers[0].color[0] = 0;}
+	if (pointers[0].color[0] < -.2){pointers[0].color[0] = .2;}
+	if (pointers[0].color[1] > 2){pointers[0].color[1] = 0;}
+	if (pointers[0].color[1] < -.2){pointers[0].color[1] = .2;}
+	if (pointers[0].color[2] > 2){pointers[0].color[2] = 0;}
+	if (pointers[0].color[2] < -.2){pointers[0].color[2] = .2;}
 });
 
 canvas.addEventListener('touchmove', (e) => {
