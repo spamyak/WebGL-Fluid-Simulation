@@ -18,7 +18,7 @@ let pointers = [];
 let splatStack = [];
 
 const  { gl, ext } = getWebGLContext(canvas);
-startGUI();
+//startGUI();
 
 function getWebGLContext (canvas) {
     const params = { alpha: false, depth: false, stencil: false, antialias: false };
@@ -556,8 +556,9 @@ function update () {
 	yvel = yvel*.999 + ((Math.random() - .5));
 	let newx = pointers[1].x + xvel;
 	let newy = pointers[1].y + yvel;
-	if(Math.random() < 0.0005){
+	if(Math.random() < 0.0001){
 		newy = -2000;
+		pointers[1].color = [.2,.2,.2];
 		config.DENSITY_DISSIPATION = 0.98;
 		config.VELOCITY_DISSIPATION = 0.99;
 		config.PRESSURE_DISSIPATION = 0.9;
@@ -567,7 +568,7 @@ function update () {
 	if(Math.random() < 0.01){
 		splatStack.push(1)
 	}
-	if(Math.random() < 0.005){
+	if(Math.random() < 0.002){
 		if(Math.random() < .2){config.DENSITY_DISSIPATION = 0.98}
 		if(Math.random() < .1){config.DENSITY_DISSIPATION = 0.993}
 		if(Math.random() < .1){config.DENSITY_DISSIPATION = Math.random()*.10 + .9}
@@ -584,7 +585,7 @@ function update () {
     pointers[1].x = newx;
     pointers[1].y = newy;
 	
-    pointers[1].color = [pointers[1].color[0] + ((Math.random()-.5)*.1), pointers[1].color[1] + ((Math.random()-.5)*.1), pointers[1].color[2] + ((Math.random()-.5)*.1)];
+    pointers[1].color = [pointers[1].color[0] + ((Math.random()-.5)*.05), pointers[1].color[1] + ((Math.random()-.5)*.05), pointers[1].color[2] + ((Math.random()-.5)*.05)];
 	if (pointers[1].color[0] > 2){pointers[1].color[0] = 0;}
 	if (pointers[1].color[0] < -.2){pointers[1].color[0] = .2;}
 	if (pointers[1].color[1] > 2){pointers[1].color[1] = 0;}
